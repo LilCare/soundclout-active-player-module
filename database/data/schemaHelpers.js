@@ -3,8 +3,8 @@ const db = require('../index');
 module.exports = {
   songSaver: (song, cb) => {
     // TBD: write code to generate a single song instance
-    const stmt = `insert into songs (length, timestamp, isliked, songfile, title, artist, album, thumbnail) 
-               values (?, ?, ?, ?, ?, ?, ?, ?)
+    const stmt = `INSERT INTO songs (length, timestamp, isliked, songfile, title, artist, album, thumbnail) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)
               `;
     const songVals = [
       song.length,
@@ -22,8 +22,8 @@ module.exports = {
   },
   playlistSaver: (songid, playlist, cb) => {
     // TBD: write code to generate a single upNext play instance
-    const stmt = `insert into ${playlist} (songid) 
-               values (?)
+    const stmt = `INSERT INTO ${playlist} (songid) 
+               VALUES (?)
               `;
     const songVal = [songid];
     db.queryAsync(stmt, songVal)
