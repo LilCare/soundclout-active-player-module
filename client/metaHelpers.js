@@ -3,7 +3,7 @@ import axios from 'axios';
 const metaHelpers = {
   // Current Player song will always be the first song in the next up playlist
   mount() {
-    axios.get('http://ec2-54-193-53-101.us-west-1.compute.amazonaws.com/songs')
+    axios.get('/songs')
       .then((results) => {
         // 1) Get all the songs as the default playlist
         const songs = results.data;
@@ -48,7 +48,7 @@ const metaHelpers = {
   shuffle() {
     const { shuffle } = this.state;
     let newStatus;
-    //  check shuffle state and rotate between '' and '-alt', where '' references the default classname
+    //  check shuffle state and rotate between '' and '-alt' classnames to toggle
     if (shuffle === '') {
       newStatus = '-alt';
     } else {
@@ -72,10 +72,9 @@ const metaHelpers = {
   like(songId, isLiked) {
     const { upNext } = this.state;
     //  Post to the "http://ec2-54-193-53-101.us-west-1.compute.amazonaws.com/like:songId" route to toggle like status
-    axios.post(`http://ec2-54-193-53-101.us-west-1.compute.amazonaws.com/like/${songId}`, { isliked: isLiked })
+    axios.post(`/like/${songId}`, { isliked: isLiked })
       .then(() => axios.get('/songs'))
       .then((results) => {
-        const songs = results.data;
         // if songId is current player song, toggle isliked to re-render "like" status
         if (songId === upNext[0].songId) {
           const likeStatus = upNext[0].isliked;
@@ -85,12 +84,7 @@ const metaHelpers = {
       })
       .catch((err) => console.log('like err', err));
   },
-  //  *IF TIME REFACTOR:
-  //  *Get nextUp songIds, use Promise.each to:
-  //    *use '/songs/:id' to get the song obj
-  //    *then push result to upNext arr
-  //    *When all promises complete: setState with upNext
-  //  *Do the same for previousPlays^
+  
 };
 
 export default metaHelpers;
